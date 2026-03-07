@@ -27,7 +27,7 @@ async function saveUser (req, res){
     user.email = params.email;
     user.role = 'ROLE_USER';
     //user.role = 'ROLE_ADMIN';
-    user.image = 'null';
+    user.image = 'user-blank.png';
 
     if(params.password){
       // encriptar contraseña
