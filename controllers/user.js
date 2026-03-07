@@ -156,9 +156,6 @@ async function getImageFile(req, res){
   const imageFile = req.params.imagefile;
   const imagePath = './uploads/users/'+imageFile ;
 
-  console.log(imageFile);
-  console.log(imagePath);
-
   if(fs.existsSync(imagePath)){
     res.sendFile(path.resolve(imagePath));
   }else{
