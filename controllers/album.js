@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
-const Artist = require('../models/artist');
 const Album = require('../models/album');
 const Song = require('../models/song');
 
