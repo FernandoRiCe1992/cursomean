@@ -152,7 +152,7 @@ async function uploadImage(req, res){
         const artistUpdated = await Artist.findByIdAndUpdate(artistId, {image: file_name});
 
         if(!artistUpdated){
-          res.status(404).send({message: 'No se actualizo el usuario'});
+          res.status(404).send({message: 'No se actualizo el artista'});
         }else{
           res.status(200).send({artist: artistUpdated});
         };
