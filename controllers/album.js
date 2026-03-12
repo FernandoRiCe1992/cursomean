@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const mongoosePaginate = require('mongoose-paginate-v2');
 
 const Album = require('../models/album');
 const Song = require('../models/song');
@@ -27,17 +26,22 @@ async function getAlbum(req, res){
 
 async function getAlbums(req, res){
   try{
+    const artistId = req.query.id;
     const page = parseInt(req.query.page, 8) || 1;
-    const itemsPerPage = 3;
+    const itemsPerPage = parseInt(req.query.itemsPerPage, 8) || 3;
+    
+    const queryBy = (!artistId) ? {} : {artist: artistId};
+    const sortBy = (!artistId) ? {title: 1} : {year: 1};
 
     const options = {
       page: page,
       limit: itemsPerPage,
-      sort: { name: 1 },
-      lean: true
+      sort: sortBy,
+      lean: true,
+      populate: 'artist'
     };
-    
-    const albums = await Album.paginate({}, options);
+
+    const albums = await Album.paginate(queryBy, options);
     
     if(!albums.docs.length){
       return res.status(404).send({message: 'No hay albums disponibles'});
