@@ -31,7 +31,7 @@ async function getArtist(req, res){
 async function getArtists(req, res){
   try{
     const page = parseInt(req.query.page, 8) || 1;
-    const itemsPerPage = 3;
+    const itemsPerPage = parseInt(req.query.itemsPerPage, 8) || 3;
 
     const options = {
       page: page,
