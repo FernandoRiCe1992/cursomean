@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 
 const Song = require('../models/song');
-const Artist = require('../models/artist');
 
 async function getSong(req, res){
   try{
@@ -118,10 +117,61 @@ async function deleteSong(req, res){
   };
 };
 
+async function uploadFile(req, res){
+  try{
+    const songId = req.params.id;
+    const file_name = 'No subido...';
+
+    if(req.files){
+      const file_path = req.files.file.path;
+      const file_split = file_path.split('\\');
+      const file_name = file_split[2];
+
+      const ext_split = file_name.split('\.');
+      const file_ext = ext_split[1];
+
+      if (file_ext == 'mp3' || file_ext == 'ogg'){
+        const SongUpdated = await Song.findByIdAndUpdate(songId, {file: file_name});
+
+        if(!SongUpdated){
+          res.status(404).send({message: 'No se actualizo la canción'});
+        }else{
+          res.status(200).send({song: SongUpdated});
+        };
+      }else{
+        res.status(400).send({message: 'Extension de imagen invalida'});
+      }
+    }else{
+      res.status(400).send({message: 'No has subido ningun fichero de audio...'});
+    };
+
+  }catch(err){
+    res.status(500).send({message: err.message});
+  };
+};
+
+async function getSongFile(req, res){
+  try{
+    const songFile = req.params.songFile;
+    const songPath = './uploads/songs/'+songFile ;
+
+    if(fs.existsSync(songPath)){
+      res.sendFile(path.resolve(songPath));
+    }else{
+      res.status(404).send({message: 'No existe el fichero de audio'});
+    };
+
+  }catch(err){
+    res.status(500).send({message: err.message});
+  };
+};
+
 module.exports = {
   getSong,
   getSongs,
   saveSong,
   updateSong,
-  deleteSong
+  deleteSong,
+  uploadFile,
+  getSongFile
 };
