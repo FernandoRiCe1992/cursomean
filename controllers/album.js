@@ -19,8 +19,7 @@ async function getAlbum(req, res){
     };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   }
 };
 
@@ -56,8 +55,7 @@ async function getAlbums(req, res){
     };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
@@ -82,8 +80,7 @@ async function saveAlbum(req, res){
     };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
@@ -101,8 +98,7 @@ async function updateAlbum(req, res){
     };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
@@ -125,8 +121,7 @@ async function deleteAlbum(req, res){
     };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
@@ -156,22 +151,26 @@ async function uploadImage(req, res){
       }
     }else{
       res.status(400).send({message: 'No has subido ninguna imagen...'});
-    }
+    };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
 async function getImageFile(req, res){
-  const imageFile = req.params.imagefile;
-  const imagePath = './uploads/albums/'+imageFile ;
+  try{
+    const imageFile = req.params.imagefile;
+    const imagePath = './uploads/albums/'+imageFile ;
 
-  if(fs.existsSync(imagePath)){
-    res.sendFile(path.resolve(imagePath));
-  }else{
-    res.status(404).send({message: 'No existe la imagen'});
+    if(fs.existsSync(imagePath)){
+      res.sendFile(path.resolve(imagePath));
+    }else{
+      res.status(404).send({message: 'No existe la imagen'});
+    };
+    
+  }catch(err){
+    res.status(500).send({message: err.message});
   };
 
 };

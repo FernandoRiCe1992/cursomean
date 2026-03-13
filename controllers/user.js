@@ -7,12 +7,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('../services/jwt');
 
 async function pruebas(req, res){
-    try{
-        res.status(200).send({message: 'probando una acción del controlador de usuario del API rest con Node y mongo'});
-    }catch(err){
-        console.log(err);
-        res.status(500).send({message: 'Error del servidor'});
-    };
+  try{
+    res.status(200).send({message: 'probando una acción del controlador de usuario del API rest con Node y mongo'});
+  }catch(err){
+    res.status(500).send({message: err.message});
+  };
 };
 
 async function saveUser (req, res){
@@ -53,11 +52,10 @@ async function saveUser (req, res){
 
     }else{
       res.status(400).send({message: 'introduce la contraseña'});
-    }
+    };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
@@ -92,8 +90,7 @@ async function loginUser(req, res){
     };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
@@ -109,9 +106,9 @@ async function updateUser(req, res){
     }else{
       res.status(200).send({user: userUpdated});
     };
+
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
@@ -144,24 +141,27 @@ async function uploadImage(req, res){
       }
     }else{
       res.status(400).send({message: 'No has subido ninguna imagen...'});
-    }
+    };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
 async function getImageFile(req, res){
-  const imageFile = req.params.imagefile;
-  const imagePath = './uploads/users/'+imageFile ;
+  try{
+    const imageFile = req.params.imagefile;
+    const imagePath = './uploads/users/'+imageFile ;
 
-  if(fs.existsSync(imagePath)){
-    res.sendFile(path.resolve(imagePath));
-  }else{
-    res.status(404).send({message: 'No existe la imagen'});
+    if(fs.existsSync(imagePath)){
+      res.sendFile(path.resolve(imagePath));
+    }else{
+      res.status(404).send({message: 'No existe la imagen'});
+    };
+
+  }catch(err){
+    res.status(500).send({message: err.message});
   };
-
 };
 
 module.exports = {

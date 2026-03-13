@@ -20,12 +20,9 @@ async function getArtist(req, res){
       res.status(200).send({artist})
     };
 
-    res.status(200).send({message: 'Método getArtist del controlador artist.js'});
-
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
-  }
+    res.status(500).send({message: err.message});
+  };
 };
 
 async function getArtists(req, res){
@@ -51,12 +48,11 @@ async function getArtists(req, res){
         docTotal: artists.totalDocs,
         artists: artists.docs
 
-      })
+      });
     };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
@@ -77,9 +73,9 @@ async function saveArtist(req, res) {
     }else{
       res.status(200).send({artist: artistStored});
     };
+
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 
 };
@@ -99,8 +95,7 @@ async function updateArtist(req, res){
     };
 
   }catch{
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
@@ -130,9 +125,8 @@ async function deleteArtist(req, res){
     };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
-  }
+    res.status(500).send({message: err.message});
+  };
 };
 
 async function uploadImage(req, res){
@@ -161,24 +155,27 @@ async function uploadImage(req, res){
       }
     }else{
       res.status(400).send({message: 'No has subido ninguna imagen...'});
-    }
+    };
 
   }catch(err){
-    console.log(err);
-    res.status(500).send({message: 'Error del servidor'});
+    res.status(500).send({message: err.message});
   };
 };
 
 async function getImageFile(req, res){
-  const imageFile = req.params.imagefile;
-  const imagePath = './uploads/artists/'+imageFile ;
+  try{
+    const imageFile = req.params.imagefile;
+    const imagePath = './uploads/artists/'+imageFile ;
 
-  if(fs.existsSync(imagePath)){
-    res.sendFile(path.resolve(imagePath));
-  }else{
-    res.status(404).send({message: 'No existe la imagen'});
+    if(fs.existsSync(imagePath)){
+      res.sendFile(path.resolve(imagePath));
+    }else{
+      res.status(404).send({message: 'No existe la imagen'});
+    };
+
+  }catch(err){
+    res.status(500).send({message: err.message});
   };
-
 };
 
 module.exports = {
