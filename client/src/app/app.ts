@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { User } from './models/user';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, FormsModule],
   templateUrl: './app.html',
 })
 export class App {
@@ -16,5 +17,9 @@ export class App {
   constructor(){
     this.user = new User('','','','','','ROLE_USER','');
     this.identity = false;
+  }
+
+  public onSubmit(){
+    console.log(this.user);
   }
 }
