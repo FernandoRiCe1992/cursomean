@@ -18,8 +18,6 @@ async function saveUser (req, res){
   try{
     const user = new User();
     const params = req.body;
-      
-    console.log(params);
 
     user.name = params.name;
     user.surname = params.surname;
