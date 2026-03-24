@@ -37,7 +37,18 @@ export class UserService{
     // .pipe(map((res:any) => {return res.data}));
   }
 
-  getIdentity(){
+  update_user(user_to_update:any){
+    let json = JSON.stringify(user_to_update);
+    let params = json;
+
+    //let headers = new HttpHeaders({'Content-Type':'application/json','Autorization': this.getToken()});
+    let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Autorization', this.getToken());
+
+    return this._http.put(this.url+'update-user/'+user_to_update._id, params, {headers: headers});
+    // .pipe(map((res:any) => {return res.data}));
+  }
+
+  getIdentity():any{
     let identity = JSON.parse(localStorage.getItem('identity')!);
 
     if(identity != "undefined"){
@@ -49,7 +60,7 @@ export class UserService{
     return this.identity
   }
 
-  getToken(){
+  getToken():any{
     let token = localStorage.getItem('token');
 
     if(token != "undefined"){

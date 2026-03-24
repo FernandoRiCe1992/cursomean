@@ -3,18 +3,45 @@
     <div class="navigation">
       <div class="col-lg-1">
         <h1>{{title}}</h1>
+        
+        <nav id="navigation">
+        </nav>
 
-        <span>{{identity.name}} {{identity.surname}}</span>
+        <nav id="user-logged">
+          <span>{{identity.name}}</span>
+          <span class="btn btn-warning" (click)="logout()">
+            Cerrar sesión
+          </span>
+          <span>
 
-        <span class="btn btn-warning" (click)="logout()">
-          Cerrar sesión
-        </span>
+            <a href="#">
+              <span class="glyphicon glyphicon-search" aria-hidden="true">
+                Buscar
+              </span>
+            </a>
+            <a href="#">
+              <span class="glyphicon glyphicon-star" aria-hidden="true">
+                Artistas
+              </span>
+            </a>
+            <a href="#">
+              <span class="glyphicon glyphicon-book" aria-hidden="true">
+                Albums
+              </span>
+            </a>
+
+          </span>
+        </nav>
+
       </div>
     </div>
 
     <div class="row justify-content-center">
       <div class="col-lg-11">
         <p>Estas logueado en la aplicación</p>
+
+        <user-edit></user-edit>
+
       </div>
     </div>
   </div>

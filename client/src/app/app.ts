@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { User } from './models/user';
 import { UserService } from './services/user.service';
+import { UserEditComponent } from './components/user-edit.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule],
+  imports: [RouterOutlet, FormsModule, UserEditComponent],
   templateUrl: './app.html',
   providers:[UserService]
 })
@@ -31,9 +32,6 @@ export class App implements OnInit{
   ngOnInit(){
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-
-    console.log(this.identity);
-    console.log(this.token);
   }
 
   public onSubmit(){
