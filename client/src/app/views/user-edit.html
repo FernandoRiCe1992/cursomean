@@ -32,6 +32,17 @@
         }
       </p>
 
+      @if(user.image && user.image != 'null'){
+        <div class="image_for_edit">
+          <img src="{{url + 'get-image-user/' + user.image}}" style="width: 50px;" />
+        </div>
+      }
+
+      <p>
+        <label>Sube tu foto:</label>
+        <input type="file" placeholder="Subir imagen..." (change)="fileChangeEvent($event)"/>
+      </p>
+
       <input type="submit" value="Actualizar mis datos" class="form-control" required />
     </form>
   </div>

@@ -1,6 +1,7 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { GLOBAL } from './services/global';
 import { User } from './models/user';
 import { UserService } from './services/user.service';
 // import { UserEditComponent } from './components/user-edit.component';
@@ -19,7 +20,8 @@ export class App implements OnInit{
   public identity: any;
   public token: any;
   public errorMessage: any;
-  public alertRegister:any;
+  public alertRegister: any;
+  public url: string;
 
   constructor(
     private _userService: UserService
@@ -27,6 +29,7 @@ export class App implements OnInit{
     this.user = new User('','','','','','ROLE_USER','');
     this.user_register = new User('','','','','','ROLE_USER','');
     this.identity = false;
+    this.url = GLOBAL.url;
   }
 
   ngOnInit(){

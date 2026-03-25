@@ -116,7 +116,7 @@ async function updateUser(req, res){
 
 async function uploadImage(req, res){
   try{
-    const userId = req.query.id;
+    const userId = req.params.id;
     const file_name = 'No subido...';
 
     if(req.files){
