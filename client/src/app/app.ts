@@ -1,13 +1,13 @@
 import { Component, signal, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { User } from './models/user';
 import { UserService } from './services/user.service';
-import { UserEditComponent } from './components/user-edit.component';
+// import { UserEditComponent } from './components/user-edit.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule, UserEditComponent],
+  imports: [RouterOutlet, FormsModule, RouterModule],
   templateUrl: './app.html',
   providers:[UserService]
 })
@@ -93,8 +93,6 @@ export class App implements OnInit{
   }
 
   onSubmitRegister(){
-    console.log(this.user_register);
-
     this._userService.register(this.user_register).subscribe({
       next: (res) => {
         let user = res.user;

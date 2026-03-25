@@ -94,8 +94,12 @@ async function loginUser(req, res){
 
 async function updateUser(req, res){
   try{
-    const userId = req.query.id;
+    const userId = req.params.id;
     const update = req.body;
+
+    if(userId != req.user.sub){
+      return res.status(500).send({message: 'No tienes permiso para actualizar este usuario'});
+    }
 
     const userUpdated = await User.findByIdAndUpdate(userId, update);
 

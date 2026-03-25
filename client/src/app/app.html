@@ -5,15 +5,6 @@
         <h1>{{title}}</h1>
         
         <nav id="navigation">
-        </nav>
-
-        <nav id="user-logged">
-          <span>{{identity.name}}</span>
-          <span class="btn btn-warning" (click)="logout()">
-            Cerrar sesión
-          </span>
-          <span>
-
             <a href="#">
               <span class="glyphicon glyphicon-search" aria-hidden="true">
                 Buscar
@@ -29,19 +20,28 @@
                 Albums
               </span>
             </a>
+        </nav>
 
+        <nav id="user-logged">
+          <span id="identity_name">{{identity.name}}</span>
+          <span class="btn btn-warning" (click)="logout()">
+            Cerrar sesión
           </span>
+          <a [routerLink]="['/mis-datos']">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            Mis datos
+          </a>
         </nav>
 
       </div>
     </div>
 
+    <div class="clearfix"></div>
+
     <div class="row justify-content-center">
       <div class="col-lg-11">
         <p>Estas logueado en la aplicación</p>
-
-        <user-edit></user-edit>
-
+        <router-outlet></router-outlet>
       </div>
     </div>
   </div>
@@ -122,5 +122,3 @@
   </div>
 
 }
-
-<router-outlet />

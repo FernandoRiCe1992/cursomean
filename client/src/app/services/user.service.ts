@@ -37,12 +37,12 @@ export class UserService{
     // .pipe(map((res:any) => {return res.data}));
   }
 
-  update_user(user_to_update:any){
+  updateUser(user_to_update:any):Observable<any>{
     let json = JSON.stringify(user_to_update);
     let params = json;
 
     //let headers = new HttpHeaders({'Content-Type':'application/json','Autorization': this.getToken()});
-    let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Autorization', this.getToken());
+    let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.getToken());
 
     return this._http.put(this.url+'update-user/'+user_to_update._id, params, {headers: headers});
     // .pipe(map((res:any) => {return res.data}));
@@ -60,7 +60,7 @@ export class UserService{
     return this.identity
   }
 
-  getToken():any{
+getToken():any{
     let token = localStorage.getItem('token');
 
     if(token != "undefined"){
@@ -68,5 +68,8 @@ export class UserService{
     }else{
       this.token = null;
     }
+
+    return this.token
   }
+
 }
