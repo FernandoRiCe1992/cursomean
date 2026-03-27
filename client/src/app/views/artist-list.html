@@ -1,0 +1,10 @@
+@if(identity){
+  <div class="head-page">
+    <h1>{{titulo}}</h1>
+    @if(identity && identity.role == 'ROLE_ADMIN'){
+    <a [routerLink]="['/crear-artista']" class="btn btn-default">
+      Añadir artista
+    </a>
+    }
+</div>
+}
