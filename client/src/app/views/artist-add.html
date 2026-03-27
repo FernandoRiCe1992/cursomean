@@ -1,25 +1,50 @@
-<h1>{{titulo}}</h1>
+@if(identity && identity.role == 'ROLE_ADMIN') {
+  <div class="col-lg-6">
+    <h1>{{titulo}}</h1>
 
-<form #formArtist="ngForm" (ngSubmit)="onSubmit()" class="col-lg-6">
-  <p>
-    <label>Nombre</label>
-    <input type="text" #name="ngModel" name="name" [(ngModel)]="artist.name" required class="form-control"/>
-    @if(!name.valid && name.touched){
-      <span>
-        El nombre es obligatorio
-      </span>
-    }
-  </p>
+    @if(alertMessage){
+          <div class="alert alert-info">
+            <strong>Info</strong> {{alertMessage}}
+          </div>
+        }
 
-  <p>
-    <label>Descripción</label>
-    <textarea #description="ngModel" name="description" [(ngModel)]="artist.description" required class="form-control"></textarea>
-    @if(!description.valid && description.touched){
-      <span>
-        La descripción es obligatoria
-      </span>
-    }
-  </p>
+    <form #formArtist="ngForm" (ngSubmit)="onSubmit()" class="col-lg-6">
+      <p>
+        <label>Nombre</label>
+        <input type="text" #name="ngModel" name="name" [(ngModel)]="artist.name" required class="form-control"/>
+        @if(!name.valid && name.touched){
+          <span>
+            El nombre es obligatorio
+          </span>
+        }
+      </p>
 
-  <input type="submit" value="{{titulo}}" [disabled]="!formArtist.form.valid" class="btn btn-success"/>
-</form>
+      <p>
+        <label>Descripción</label>
+        <textarea #description="ngModel" name="description" [(ngModel)]="artist.description" required class="form-control"></textarea>
+        @if(!description.valid && description.touched){
+          <span>
+            La descripción es obligatoria
+          </span>
+        }
+      </p>
+
+      @if(is_edit){
+        <div class="artist_image_for_edit">
+          @if(artist.image && artist.image != 'null'){
+            <img src="{{url + 'get-image-artist/' + artist.image }}" />
+          }
+          <p>
+            <label>Sube la imagen del artista</label>
+            <input type="file" placeholder="Subir imagen..." (change)="fileChangeEvent($event)" />
+          </p>
+        </div>
+      }
+
+      <input type="submit" value="{{titulo}}" [disabled]="!formArtist.form.valid" class="btn btn-success"/>
+    </form>
+  </div>
+}@else{
+  <h1>Error</h1>
+  <p>No tienes acceso a esta parte de la aplicación</p>
+}

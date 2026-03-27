@@ -1,15 +1,15 @@
 import { Component, OnInit } from "@angular/core";
 import { RouterModule, Router, ActivatedRoute, Params } from "@angular/router";
-
 import { GLOBAL } from "../services/global";
 import { Artist } from "../models/artist";
 import { UserService } from "../services/user.service";
+import { ArtistService } from "../services/artist.service";
 
 @Component({
   selector: 'artist-list',
   imports: [RouterModule],
   templateUrl: '../views/artist-list.html',
-  providers: [UserService]
+  providers: [UserService, ArtistService]
 })
 
 export class ArtistListComponent implements OnInit {
@@ -18,23 +18,68 @@ export class ArtistListComponent implements OnInit {
   public identity: any;
   public token: string;
   public url: string;
+  public next_page: number;
+  public prev_page: number;
+  public alertMessage: any;
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _userService: UserService
+    private _userService: UserService,
+    private _artistService: ArtistService
+
   ){
     this.titulo = 'Artistas';
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
     this.artists = [];
+    this.next_page = 1;
+    this.prev_page = 1;
   }
 
   ngOnInit() {
     console.log('artist-list.component.ts cargado');
 
     // Conseguir el listado de artistas
+    this.getArtists();
+  }
+
+  getArtists(){
+    this._route.params.forEach((params: Params) => {
+      let page = +params['page'];
+
+      if(!page){
+        page = 1;
+      }else{
+        this.next_page = page + 1;
+        this.prev_page = page - 1;
+
+        if(this.prev_page == 0){
+          this.prev_page = 1;
+        }
+      }
+
+      this._artistService.getArtists(this.token, page).subscribe({
+        next: (res) => {
+          if(!res.artists){
+            this._router.navigate(['/']);
+          }else{
+            this.artists = res.artists;
+          }
+        },
+        error: (err) => {
+          let alertMessage = <any>err;
+
+          if (alertMessage != null){
+            let body = err?.error?.message;
+            this.alertMessage = body;
+
+            console.log(body);
+          }
+        }
+      })
+    });
   }
 
 }
