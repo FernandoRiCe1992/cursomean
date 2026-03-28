@@ -28,8 +28,14 @@
         @if(identity.role == 'ROLE_ADMIN'){
           <div class="buttons">
             <a [routerLink]="['/editar-artista', artist._id]" class="btn btn-sm btn-warning">Editar</a>
-            <a href="#" class="btn btn-sm btn-danger">Borrar</a>
+            <a (click)="onDeleteConfirm(artist._id)" class="btn btn-sm btn-danger">Borrar</a>
           </div>
+          @if(confirmado == artist._id){
+            <div class="seguro">
+              <a (click)="onDeleteArtist(artist._id)" class="btn btn-sm btn-danger">Eliminar</a>
+              <a (click)="onCancelArtist()" class="btn btn-sm btn-primary">Cancelar</a>
+            </div>
+          }
         }
       </div>
     </li>

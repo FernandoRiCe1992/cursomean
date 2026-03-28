@@ -41,7 +41,7 @@ export class ArtistService{
     return this._http.put(this.url+'artist/'+id, params, {headers: headers});
   }
 
-  deleteArtist(token:any, id:string){
+  deleteArtist(token:any, id:string):Observable<any>{
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': token

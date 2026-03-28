@@ -54,6 +54,9 @@ export class ArtistDetailComponent implements OnInit {
           }else{
             this.artist = res.artist;
             this._changeDetectorRef.detectChanges();
+
+            // Sacar los albums del artista
+
           }
         },
         error: (err) => {
