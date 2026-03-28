@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef} from "@angular/core";
 import { RouterModule, Router, ActivatedRoute, Params } from "@angular/router";
 import { FormsModule } from '@angular/forms';
 import { GLOBAL } from "../services/global";
@@ -29,7 +29,8 @@ export class ArtistEditComponent implements OnInit {
     private _router: Router,
     private _userService: UserService,
     private _artistService: ArtistService,
-    private _uploadService: UploadService
+    private _uploadService: UploadService,
+    private _changeDetectorRef: ChangeDetectorRef
   ){
     this.titulo = 'Editar artista';
     this.identity = this._userService.getIdentity();
@@ -58,6 +59,7 @@ export class ArtistEditComponent implements OnInit {
             this._router.navigate(['/']);
           }else{
             this.artist = res.artist;
+            this._changeDetectorRef.detectChanges();
           }
         },
         error: (err) => {
@@ -65,9 +67,8 @@ export class ArtistEditComponent implements OnInit {
 
           if (alertMessage != null){
             let body = err?.error?.message;
-            // this.alertMessage = body;
-
-            console.log(body);
+            this.alertMessage = body;
+            this._changeDetectorRef.detectChanges();
           }
         }
       });
@@ -86,14 +87,19 @@ export class ArtistEditComponent implements OnInit {
             this.alertMessage = alert('El artista se ha actualizado correctamente');
 
             // subir la imagen del artista
-            this._uploadService.makeFileRequest(this.url+'upload-image-artist/'+id, [], this.filesToUpload, this.token, 'image')
-              .then((res) =>{
-                this._router.navigate(['/artista', 1]);
-              })
-              .catch((err) => {
-                console.log(err);
-              })
-            this._router.navigate(['/editar-artista', res.artist._id])
+            if(this.filesToUpload.length === 0){
+              this._router.navigate(['/editar-artista', res.artist._id]);
+              this._changeDetectorRef.detectChanges();
+            }else{
+              this._uploadService.makeFileRequest(this.url+'upload-image-artist/'+id, [], this.filesToUpload, this.token, 'image')
+                .then((res) =>{
+                  this._router.navigate(['/artista', id]);
+                  this._changeDetectorRef.detectChanges();
+                })
+                .catch((err) => {
+                  console.log(err);
+                })
+            }
           }
         },
         error: (err) => {
@@ -102,6 +108,7 @@ export class ArtistEditComponent implements OnInit {
           if (alertMessage != null){
             let body = err?.error?.message;
             this.alertMessage = body;
+            this._changeDetectorRef.detectChanges();
 
             console.log(body);
           }

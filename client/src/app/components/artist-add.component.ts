@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { RouterModule, Router, ActivatedRoute, Params } from "@angular/router";
 import { FormsModule } from '@angular/forms';
 import { GLOBAL } from "../services/global";
@@ -27,7 +27,8 @@ export class ArtistAddComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private _userService: UserService,
-    private _artistService: ArtistService
+    private _artistService: ArtistService,
+    private _changeDetectorRef: ChangeDetectorRef
   ){
     this.titulo = 'Crear nuevo artista';
     this.identity = this._userService.getIdentity();
@@ -59,8 +60,7 @@ export class ArtistAddComponent implements OnInit {
         if (alertMessage != null){
           let body = err?.error?.message;
           this.alertMessage = body;
-
-          console.log(body);
+          this._changeDetectorRef.detectChanges();
         }
       }
     })

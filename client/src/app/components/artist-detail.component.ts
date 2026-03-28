@@ -1,26 +1,25 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { RouterModule, Router, ActivatedRoute, Params } from "@angular/router";
+import { FormsModule } from '@angular/forms';
 import { GLOBAL } from "../services/global";
-import { Artist } from "../models/artist";
+import { Artist } from '../models/artist';
 import { UserService } from "../services/user.service";
 import { ArtistService } from "../services/artist.service";
 
 @Component({
-  selector: 'artist-list',
-  imports: [RouterModule],
-  templateUrl: '../views/artist-list.html',
+  selector: 'artist-detail',
+  imports: [RouterModule, FormsModule],
+  templateUrl: '../views/artist-detail.html',
   providers: [UserService, ArtistService]
 })
 
-export class ArtistListComponent implements OnInit {
-  public titulo: string;
-  public artists: Artist[];
+export class ArtistDetailComponent implements OnInit {
+  public artist: Artist;
   public identity: any;
   public token: string;
   public url: string;
-  public next_page: number;
-  public prev_page: number;
-  public alertMessage: any;
+  public alertMessage:any;
+  public is_edit:boolean;
 
   constructor(
     private _route: ActivatedRoute,
@@ -28,45 +27,32 @@ export class ArtistListComponent implements OnInit {
     private _userService: UserService,
     private _artistService: ArtistService,
     private _changeDetectorRef: ChangeDetectorRef
-
   ){
-    this.titulo = 'Artistas';
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.artists = [];
-    this.next_page = 1;
-    this.prev_page = 1;
+    this.artist = this.identity;
+    this.is_edit = true;
   }
 
   ngOnInit() {
-    console.log('artist-list.component.ts cargado');
+    console.log('artist-detail.component.ts cargado');
 
-    // Conseguir el listado de artistas
-    this.getArtists();
+    // Llamar al metodo del API para sacar un artista en base a su id getArtist
+    this.getArtist();
+
   }
 
-  getArtists(){
-    this._route.params.forEach((params: Params) => {
-      let page = +params['page'];
+  getArtist(){
+    this._route.params.forEach((params: Params) =>{
+      let id = params['id'];
 
-      if(!page){
-        page = 1;
-      }else{
-        this.next_page = page + 1;
-        this.prev_page = page - 1;
-
-        if(this.prev_page == 0){
-          this.prev_page = 1;
-        }
-      }
-
-      this._artistService.getArtists(this.token, page).subscribe({
+      this._artistService.getArtist(this.token, id).subscribe({
         next: (res) => {
-          if(!res.artists){
+          if(!res.artist){
             this._router.navigate(['/']);
           }else{
-            this.artists = res.artists;
+            this.artist = res.artist;
             this._changeDetectorRef.detectChanges();
           }
         },
@@ -76,13 +62,11 @@ export class ArtistListComponent implements OnInit {
           if (alertMessage != null){
             let body = err?.error?.message;
             this.alertMessage = body;
-
-            console.log(body);
+            this._changeDetectorRef.detectChanges();
           }
         }
-      })
+      });
     });
   }
-
 }
 

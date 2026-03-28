@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterOutlet, RouterModule, Router, ActivatedRoute, Params } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { GLOBAL } from './services/global';
@@ -26,7 +26,8 @@ export class App implements OnInit{
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _userService: UserService
+    private _userService: UserService,
+    private _changeDetectorRef: ChangeDetectorRef
   ){
     this.user = new User('','','','','','ROLE_USER','');
     this.user_register = new User('','','','','','ROLE_USER','');
@@ -49,6 +50,7 @@ export class App implements OnInit{
 
         if(!this.identity){
           alert("El usuario no esta logueado correctamente");
+          this._changeDetectorRef.detectChanges();
         }else{
           // conseguir el token para enviarselo a cada peticion
 
@@ -65,6 +67,7 @@ export class App implements OnInit{
                 // Crear elemento en el localStorage para tener al usuario en sesion
                 localStorage.setItem('token', token);
                 this.user = new User('','','','','','ROLE_USER','');
+                this._changeDetectorRef.detectChanges();
               };
             },
             error: (err) => {
@@ -73,6 +76,7 @@ export class App implements OnInit{
               if (errorMessage != null){
               let body = err?.error?.message;
               this.errorMessage = body;
+              this._changeDetectorRef.detectChanges();
               }
             }
           });
@@ -84,6 +88,7 @@ export class App implements OnInit{
         if (errorMessage != null){
           let body = err?.error?.message;
           this.errorMessage = body;
+          this._changeDetectorRef.detectChanges();
         }
       }
     });
@@ -95,7 +100,9 @@ export class App implements OnInit{
     localStorage.clear();
     this.identity = null;
     this.token = null;
+    this.errorMessage = null;
     this._router.navigate(['/']);
+    this._changeDetectorRef.detectChanges();
   }
 
   onSubmitRegister(){
@@ -109,6 +116,7 @@ export class App implements OnInit{
         }else{
           this.alertRegister = 'El Registro se ha realizado correctamente, identificate con: '+this.user_register.email
           this.user_register = new User('','','','','','ROLE_USER','');
+          this._changeDetectorRef.detectChanges();
         }
       },
       error: (err) => {
@@ -117,6 +125,7 @@ export class App implements OnInit{
         if (errorMessage != null){
           let body = err?.error?.message;
           this.alertRegister = body;
+          this._changeDetectorRef.detectChanges();
         }
       }
     });

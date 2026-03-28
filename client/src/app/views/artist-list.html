@@ -19,10 +19,10 @@
   @for(artist of artists; track artist.name){
     <li class="col-lg-3 artist-item">
       <div class="artist-image">
-        <img src="{{url + 'get-image-artist/' + artist.image}}" style="width: 100px;"/>
+        <img src="{{url + 'get-image-artist/' + artist.image}}"/>
       </div>
       <div class="artist-name">
-        <a href="">
+        <a [routerLink]="['/artista', artist._id]">
           {{artist.name}}
         </a>
         @if(identity.role == 'ROLE_ADMIN'){

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef} from "@angular/core";
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UserService } from "../services/user.service";
@@ -22,7 +22,8 @@ export class UserEditComponent implements OnInit{
   public url:string;
 
 constructor(
-  private _userService: UserService
+  private _userService: UserService,
+  private _changeDetectorRef: ChangeDetectorRef
 ){
   this.titulo = 'Actualizar usuario';
   this.identity = this._userService.getIdentity();
@@ -38,10 +39,10 @@ constructor(
 
   onSubmit(){
     this._userService.updateUser(this.user).subscribe({
-      next: (res) => {  
+      next: (res) => {
         if(!res.user){
           this.alertMessage = 'El usuario no se ha actualizado';
-        }else{          
+        }else{
           localStorage.setItem('identity', JSON.stringify(this.user));
           let identity_name = document.getElementById("identity_name")
           if(identity_name !== null && identity_name !== undefined){
@@ -53,7 +54,7 @@ constructor(
           }else{
             this.makeFileRequest(this.url+'upload-image-user/'+this.user._id, [], this.filesToUpload).then(
               (result: any) =>{
-                this.user.image = result.image; 
+                this.user.image = result.image;
                 localStorage.setItem('identity', JSON.stringify(this.user));
                 let image_path = this.url+'get-image-user/'+this.user.image;
 
@@ -67,6 +68,7 @@ constructor(
           }
 
           this.alertMessage = 'Datos actualizados correctamente';
+          this._changeDetectorRef.detectChanges();
         }
       },
       error: (err) => {
@@ -75,6 +77,7 @@ constructor(
         if (alertMessage != null){
           let body = err?.error?.message;
           this.alertMessage = body;
+          this._changeDetectorRef.detectChanges();
         }
       }
     });
