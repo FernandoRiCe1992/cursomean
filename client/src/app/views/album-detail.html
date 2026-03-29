@@ -6,17 +6,53 @@
       </div>
       <div class="data">
         <h1>{{album.title}}</h1>
+        <p><strong>{{album.artist.name}}</strong></p>
         <p>{{album.year}}</p>
         <p>{{album.description}}</p>
 
         @if(identity.role == 'ROLE_ADMIN'){
-          <a href="#" class="btn btn-default">
+          <a [routerLink]="['/crear-tema', album._id]" class="btn btn-default">
           Añadir canción
         </a>
         }
 
       </div>
     </div>
+
+    <div class="clearfix"></div>
+
+    @if(songs){
+      <div class="gallery-songs">
+        <ul id="songs-list">
+          @for(song of songs; track song.name){
+            <li class="song-item">
+              <div class="title">
+                <a class="btn btn-success">
+                  <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                </a>
+
+                {{song.number + '. ' + song.name + ' - ' + song.duration}}
+
+                @if(identity.role == 'ROLE_ADMIN'){
+                  <div class="buttons">
+                    <a [routerLink]="['/editar-tema', song._id]" class="btn btn-warning">Editar</a>
+                    <a (click)="onDeleteConfirm(song._id)" class="btn btn-danger">Borrar</a>
+                  </div>
+                  @if(confirmado == song._id){
+                    <div class="seguro seguro-song">
+                      <a (click)="onDeleteSong(song._id)" class="btn btn-sm btn-danger">Eliminar</a>
+                      <a (click)="onCancelSong()" class="btn btn-sm btn-primary">Cancelar</a>
+                    </div>
+                  }
+                  <div class="clearfix"></div>
+                }
+              </div>
+            </li>
+          }
+
+        </ul>
+      </div>
+    }
   </div>
 
 }

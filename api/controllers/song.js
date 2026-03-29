@@ -7,7 +7,7 @@ const Song = require('../models/song');
 
 async function getSong(req, res){
   try{
-    const songId = req.query.id;
+    const songId = req.params.id;
 
     const song = await Song.findById(songId);
     
@@ -24,7 +24,7 @@ async function getSong(req, res){
 
 async function getSongs(req, res){
   try{
-    const albumId = req.query.id;
+    const albumId = req.params.id;
     const page = parseInt(req.query.page, 8) || 1;
     const itemsPerPage = parseInt(req.query.itemsPerPage, 8) || 3;
 
@@ -85,7 +85,7 @@ async function saveSong(req, res){
 
 async function updateSong(req, res){
   try{
-    const songId = req.query.id;
+    const songId = req.params.id;
     const update = req.body;
 
     const songUpdate = await Song.findByIdAndUpdate(songId, update);
@@ -103,7 +103,7 @@ async function updateSong(req, res){
 
 async function deleteSong(req, res){
   try{
-    const songId = req.query.id;
+    const songId = req.params.id;
 
     const songDelete = await Song.findByIdAndDelete(songId);
 

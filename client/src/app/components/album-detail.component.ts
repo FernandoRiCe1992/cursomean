@@ -4,18 +4,21 @@ import { FormsModule } from '@angular/forms';
 import { GLOBAL } from "../services/global";
 import { Album } from "../models/album";
 import { Artist } from "../models/artist";
+import { Song } from "../models/song";
 import { UserService } from "../services/user.service";
 import { AlbumService } from "../services/album.service";
+import { SongService } from "../services/song.service";
 
 @Component({
   selector: 'album-detail',
   imports: [RouterModule, FormsModule],
   templateUrl: '../views/album-detail.html',
-  providers: [UserService, AlbumService]
+  providers: [UserService, AlbumService, SongService]
 })
 
 export class AlbumDetailComponent implements OnInit {
   public album: Album;
+  public songs: Song[];
   public identity: any;
   public token: string;
   public url: string;
@@ -30,6 +33,7 @@ export class AlbumDetailComponent implements OnInit {
     private _router: Router,
     private _userService: UserService,
     private _albumService: AlbumService,
+    private _songService: SongService,
     private _changeDetectorRef: ChangeDetectorRef
   ){
     this.identity = this._userService.getIdentity();
@@ -40,6 +44,7 @@ export class AlbumDetailComponent implements OnInit {
     this.next_page = 1;
     this.prev_page = 1;
     this.confirmado = null;
+    this.songs = [];
   }
 
   ngOnInit() {
@@ -74,15 +79,14 @@ export class AlbumDetailComponent implements OnInit {
           }else{
             this.album = res.album;
             this._changeDetectorRef.detectChanges();
-            /*
-            // Sacar los albums del artista
-            this._albumService.getAlbums(this.token, page, res.artist._id).subscribe({
+            // Sacar las canciones del album
+            this._songService.getSongs(this.token, res.album._id).subscribe({
               next: (res) => {
 
-                if(!res.albums){
-                  this.alertMessage = 'Este artista no tiene albums'
+                if(!res.songs){
+                  this.alertMessage = 'Este album no tiene canciones'
                 }else{
-                  this.albums = res.albums;
+                  this.songs = res.songs;
                   this._changeDetectorRef.detectChanges();
                 }
 
@@ -98,7 +102,6 @@ export class AlbumDetailComponent implements OnInit {
               }
 
             })
-           */
           }
         },
 
@@ -112,6 +115,36 @@ export class AlbumDetailComponent implements OnInit {
           }
         }
       });
+    });
+  }
+
+  onDeleteConfirm(id:string){
+    this.confirmado = id;
+  }
+
+  onCancelSong(){
+    this.confirmado = null
+  }
+
+  onDeleteSong(id:string){
+    this._songService.deleteSong(this.token, id).subscribe({
+      next: (res) => {
+          if(!res.song){
+            alert("Error en el servidor");
+          }else{
+            this.getAlbum();
+            this._changeDetectorRef.detectChanges();
+          }
+        },
+        error: (err) => {
+          let alertMessage = <any>err;
+
+          if (alertMessage != null){
+            let body = err?.error?.message;
+            this.alertMessage = body;
+            this._changeDetectorRef.detectChanges();
+          }
+        }
     });
   }
 
