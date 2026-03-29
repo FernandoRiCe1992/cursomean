@@ -2,22 +2,20 @@ import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { RouterModule, Router, ActivatedRoute, Params } from "@angular/router";
 import { FormsModule } from '@angular/forms';
 import { GLOBAL } from "../services/global";
-import { Artist } from '../models/artist';
 import { Album } from "../models/album";
+import { Artist } from "../models/artist";
 import { UserService } from "../services/user.service";
-import { ArtistService } from "../services/artist.service";
 import { AlbumService } from "../services/album.service";
 
 @Component({
-  selector: 'artist-detail',
+  selector: 'album-detail',
   imports: [RouterModule, FormsModule],
-  templateUrl: '../views/artist-detail.html',
-  providers: [UserService, ArtistService, AlbumService]
+  templateUrl: '../views/album-detail.html',
+  providers: [UserService, AlbumService]
 })
 
-export class ArtistDetailComponent implements OnInit {
-  public artist: Artist;
-  public albums: Album[];
+export class AlbumDetailComponent implements OnInit {
+  public album: Album;
   public identity: any;
   public token: string;
   public url: string;
@@ -31,30 +29,29 @@ export class ArtistDetailComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private _userService: UserService,
-    private _artistService: ArtistService,
     private _albumService: AlbumService,
     private _changeDetectorRef: ChangeDetectorRef
   ){
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.artist = this.identity;
     this.is_edit = true;
-    this.albums = [];
+    this.album = new Album('','','',2026,'',new Artist('','','',''));
     this.next_page = 1;
     this.prev_page = 1;
     this.confirmado = null;
   }
 
   ngOnInit() {
-    console.log('artist-detail.component.ts cargado');
+    console.log('album-detail.component.ts cargado');
 
-    // Llamar al metodo del API para sacar un artista en base a su id getArtist
-    this.getArtist();
+    // Llamar al metodo del API para sacar un album de la base de datos
+    this.getAlbum();
 
   }
 
-  getArtist(){
+  getAlbum(){
+    console.log("el metodo funciona");
     this._route.params.forEach((params: Params) =>{
       let id = params['id'];
       let page = params['page'];
@@ -70,23 +67,25 @@ export class ArtistDetailComponent implements OnInit {
         }
       }
 
-      this._artistService.getArtist(this.token, id).subscribe({
+      this._albumService.getAlbum(this.token, id).subscribe({
         next: (res) => {
-          if(!res.artist){
+          if(!res.album){
             this._router.navigate(['/']);
           }else{
-            this.artist = res.artist;
+            this.album = res.album;
             this._changeDetectorRef.detectChanges();
-
+            /*
             // Sacar los albums del artista
             this._albumService.getAlbums(this.token, page, res.artist._id).subscribe({
               next: (res) => {
+
                 if(!res.albums){
                   this.alertMessage = 'Este artista no tiene albums'
                 }else{
                   this.albums = res.albums;
                   this._changeDetectorRef.detectChanges();
                 }
+
               },
               error: (err) => {
                 let alertMessage = <any>err;
@@ -99,8 +98,10 @@ export class ArtistDetailComponent implements OnInit {
               }
 
             })
+           */
           }
         },
+
         error: (err) => {
           let alertMessage = <any>err;
 
@@ -113,37 +114,6 @@ export class ArtistDetailComponent implements OnInit {
       });
     });
   }
-
-  onDeleteConfirm(id:string){
-    this.confirmado = id;
-  }
-
-  onCancelAlbum(){
-    this.confirmado = null
-  }
-
-  onDeleteAlbum(id:string){
-    this._albumService.deleteAlbum(this.token, id).subscribe({
-      next: (res) => {
-          if(!res.album){
-            alert("Error en el servidor");
-          }else{
-            this.getArtist();
-            this._changeDetectorRef.detectChanges();
-          }
-        },
-        error: (err) => {
-          let alertMessage = <any>err;
-
-          if (alertMessage != null){
-            let body = err?.error?.message;
-            this.alertMessage = body;
-            this._changeDetectorRef.detectChanges();
-          }
-        }
-    });
-  }
-
 
 }
 

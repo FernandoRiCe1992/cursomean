@@ -8,7 +8,7 @@ const Song = require('../models/song');
 
 async function getAlbum(req, res){
   try{
-    const albumId = req.query.id;
+    const albumId = req.params.id;
     
     const album = await Album.findById(albumId).populate({path: 'artist'}).exec();
     
@@ -25,8 +25,8 @@ async function getAlbum(req, res){
 
 async function getAlbums(req, res){
   try{
-    const artistId = req.query.id;
-    const page = parseInt(req.query.page, 8) || 1;
+    const artistId = req.params.id;
+    const page = parseInt(req.params.page, 8) || 1;
     const itemsPerPage = parseInt(req.query.itemsPerPage, 8) || 3;
     
     const queryBy = (!artistId) ? {} : {artist: artistId};
@@ -86,7 +86,7 @@ async function saveAlbum(req, res){
 
 async function updateAlbum(req, res){
   try{
-    const albumId = req.query.id;
+    const albumId = req.params.id;
     const update = req.body;
 
     const albumUpdated = await Album.findByIdAndUpdate(albumId, update);
@@ -104,7 +104,7 @@ async function updateAlbum(req, res){
 
 async function deleteAlbum(req, res){
   try{
-    const albumId = req.query.id;
+    const albumId = req.params.id;
     
     const albumDeleted = await Album.findByIdAndDelete(albumId);
 
@@ -127,7 +127,7 @@ async function deleteAlbum(req, res){
 
 async function uploadImage(req, res){
   try{
-    const albumId = req.query.id;
+    const albumId = req.params.id;
     const file_name = 'No subido...';
 
     if(req.files){

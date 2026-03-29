@@ -11,7 +11,7 @@
         <p class="description">{{artist.description}}</p>
 
         @if(identity.role == 'ROLE_ADMIN'){
-          <a href="#" class="btn btn-default">
+          <a [routerLink]="['/crear-album', artist._id]" class="btn btn-default">
             Añadir album
           </a>
         }
@@ -20,13 +20,50 @@
     </div>
 
     <div class="clearfix"></div>
-    <!--
+
     @if(albums){
       <div id="gallery-albums">
-         -- LISTAR LOS ALBUMS
+         <ul class="album-list">
+          @for(album of albums; track album.title){
+            <li class="col-lg-4 album-item">
+              <div class="album-image">
+                <img src="{{url + 'get-image-album/' + album.image}}" />
+              </div>
+
+              <div class="album-name">
+                <p>
+                  <a [routerLink]="['/album', album._id]">
+                    {{album.title}}
+                  </a>
+                </p>
+
+                <p>
+                  <a [routerLink]="['/artista', album.artist._id]">
+                    {{album.artist.name}}
+                  </a>
+                </p>
+
+                @if(identity.role == 'ROLE_ADMIN'){
+                  <div class="buttons">
+                    <a [routerLink]="['/editar-album', album._id]" class="btn btn-sm btn-warning">Editar</a>
+                    <a (click)="onDeleteConfirm(album._id)" class="btn btn-sm btn-danger">Borrar</a>
+                  </div>
+                  @if(confirmado == album._id){
+                    <div class="seguro">
+                      <a (click)="onDeleteAlbum(album._id)" class="btn btn-sm btn-danger">Eliminar</a>
+                      <a (click)="onCancelAlbum()" class="btn btn-sm btn-primary">Cancelar</a>
+                    </div>
+                  }
+                }
+
+              </div>
+
+
+            </li>
+          }
+         </ul>
       </div>
     }
-    -->
 
   </div>
 }

@@ -1,0 +1,23 @@
+@if(album){
+  <div class="album-box">
+    <div id="album-head-card">
+      <div class="image">
+        <img src="{{url + 'get-image-album/' + album.image}}" />
+      </div>
+      <div class="data">
+        <h1>{{album.title}}</h1>
+        <p>{{album.year}}</p>
+        <p>{{album.description}}</p>
+
+        @if(identity.role == 'ROLE_ADMIN'){
+          <a href="#" class="btn btn-default">
+          Añadir canción
+        </a>
+        }
+
+      </div>
+    </div>
+  </div>
+
+}
+
