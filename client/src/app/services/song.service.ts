@@ -21,6 +21,8 @@ export class SongService{
   getSongs(token:any, albumId:string | null):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', token);
 
+    // console.log(albumId)
+
     if(albumId == null){
       return this._http.get(this.url+'songs', {headers: headers});
     }else{

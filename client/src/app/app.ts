@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { GLOBAL } from './services/global';
 import { User } from './models/user';
 import { UserService } from './services/user.service';
-// import { UserEditComponent } from './components/user-edit.component';
+//import player
+import { PlayerComponent } from './components/player.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule, RouterModule],
+  imports: [RouterOutlet, FormsModule, RouterModule, PlayerComponent],
   templateUrl: './app.html',
   providers:[UserService]
 })

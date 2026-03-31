@@ -27,14 +27,13 @@ async function getAlbums(req, res){
   try{
     const artistId = req.params.id;
     const page = parseInt(req.params.page, 8) || 1;
-    const itemsPerPage = parseInt(req.query.itemsPerPage, 8) || 3;
+    // const itemsPerPage = parseInt(req.query.itemsPerPage, 8) || 3;
     
     const queryBy = (!artistId) ? {} : {artist: artistId};
     const sortBy = (!artistId) ? {title: 1} : {year: 1};
 
     const options = {
       page: page,
-      limit: itemsPerPage,
       sort: sortBy,
       lean: true,
       populate: 'artist'

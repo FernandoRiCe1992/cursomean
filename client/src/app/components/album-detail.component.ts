@@ -78,11 +78,11 @@ export class AlbumDetailComponent implements OnInit {
             this._router.navigate(['/']);
           }else{
             this.album = res.album;
-            this._changeDetectorRef.detectChanges();
+            // this._changeDetectorRef.detectChanges();
             // Sacar las canciones del album
             this._songService.getSongs(this.token, res.album._id).subscribe({
               next: (res) => {
-
+                console.log(res.songs);
                 if(!res.songs){
                   this.alertMessage = 'Este album no tiene canciones'
                 }else{
@@ -146,6 +146,35 @@ export class AlbumDetailComponent implements OnInit {
           }
         }
     });
+  }
+
+  startPlayer(song:Song){
+    let song_player = JSON.stringify(song);
+    let file_path = this.url + 'get-song-file/' + song.file;
+    let image_path = this.url + 'get-image-album/' + song.album.image;
+
+    localStorage.setItem('sound_song', song_player);
+    document.getElementById("mp3-source")?.setAttribute("src", file_path);
+    (document.getElementById("player") as any).load();
+    (document.getElementById("player") as any).play();
+
+    let play_song_title = document.getElementById("play-song-title");
+    let play_song_artist = document.getElementById("play-song-artist");
+    let play_image_album = document.getElementById("play-image-album");
+
+    if(play_song_title !== null && play_song_title !== undefined){
+      play_song_title.innerHTML = song.name;
+    }
+
+    if(play_song_artist !== null && play_song_artist !== undefined){
+      play_song_artist.innerHTML = song.album.artist.name;
+    }
+
+    if(play_image_album !== null && play_image_album !== undefined){
+      play_image_album.setAttribute('src', image_path)
+    }
+
+    this._changeDetectorRef.detectChanges();
   }
 
 }

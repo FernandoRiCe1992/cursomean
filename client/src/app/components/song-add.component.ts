@@ -3,6 +3,8 @@ import { RouterModule, Router, ActivatedRoute, Params } from "@angular/router";
 import { FormsModule } from '@angular/forms';
 import { GLOBAL } from "../services/global";
 import { Song } from "../models/song";
+import { Album } from "../models/album";
+import { Artist } from "../models/artist";
 import { UserService } from "../services/user.service";
 import { SongService } from "../services/song.service";
 
@@ -36,7 +38,7 @@ export class SongAddComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.song = new Song('',1,'','','','')
+    this.song = new Song('',1,'','','',new Album('','','',1,'',new Artist('','','','')));
     this.is_edit = false;
     this.filesToUpload = [];
   }

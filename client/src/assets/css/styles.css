@@ -114,26 +114,25 @@ html, body{
   width: 150px;
 }
 
-.artist-list,
-.album-list{
+.artist-list{
   margin: 0px;
   padding: 0px;
-  margin-top: 30px;
   list-style: none;
+  min-height: 400px;
 }
 
 .artist-item{
   width: 23%;
   margin: 0px;
   padding: 0px;
-  height: 317px;
+  height: 311px;
   border: 1px solid #444;
   margin-left: 20px;
   margin-top: 20px;
+  background: #222326;
 }
 
-.artist-item .artist-image,
-.album-item .album-image{
+.artist-item .artist-image{
   height: 254px;
   width: 100%;
   overflow: hidden;
@@ -145,10 +144,9 @@ html, body{
   height: 100%;
 }
 
-.artist-item .artist-name,
-.album-item .album-name{
+.artist-item .artist-name{
   color: white;
-  padding: 6px;
+  padding: 3px;
   background: #222326;
 }
 
@@ -159,15 +157,37 @@ html, body{
 
 /* ALBUM */
 
+.album-list{
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  min-height: 1000px;
+  margin-bottom: 380px;
+}
+
 .album-item{
   width: 23%;
   margin: 0px;
   padding: 0px;
   height: 357px;
   border: 1px solid #444;
-  margin-left: 20px;
-  margin-top: 20px;
+  margin-left: 15px;
+  margin-bottom: 5px;
+  margin-top: 15px;
+  background: #222326;
 }
+
+.album-item .album-name{
+  color: white;
+  padding: 16px;
+  background: #222326;
+}
+
+/*
+.album-item .album-image{
+  height: 233px;
+}
+  */
 
 .album-item .album-image img{
   width: 100%;
@@ -178,6 +198,8 @@ html, body{
 #song-list{
   margin: 0px;
   padding: 0px;
+  min-height: 800px;
+  padding-bottom: 200px;
 }
 
 .song-item{
@@ -199,4 +221,42 @@ html, body{
 .song-item .btn-success{
   margin-right: 10px;
 
+}
+
+/* PLAYER */
+
+.player{
+  background: #1c1c1f;
+  position: fixed;
+  width: 90.5%;
+  bottom: 0;
+  padding: 20px;
+  margin-left: -15px;
+  border-left: 1px solid #444;
+  color: grey;
+}
+
+.player .album-image{
+  float: left;
+  width: 138px;
+  height: 105px;
+  overflow: hidden;
+}
+
+.player .album-image img{
+  height: 100%;
+}
+
+.player .audio-file{
+  width: 85%;
+  height: 40px;
+  margin-top: 7px;
+  margin-left: 10px;
+  float: left;
+}
+
+#player{
+  width: 100%;
+  height: 40px;
+  margin-top: 10px;
 }

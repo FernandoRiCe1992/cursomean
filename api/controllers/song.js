@@ -24,16 +24,12 @@ async function getSong(req, res){
 
 async function getSongs(req, res){
   try{
-    const albumId = req.params.id;
-    const page = parseInt(req.query.page, 8) || 1;
-    const itemsPerPage = parseInt(req.query.itemsPerPage, 8) || 3;
+    const albumId = req.params.album;
 
-    const queryBy = (!albumId) ? {} : {album: albumId};
-    const sortBy = (!albumId) ? {name: 1} : {number: 1};
+    const queryBy = {album: albumId};
+    const sortBy = {number: 1};
 
     const options = {
-      page: page,
-      limit: itemsPerPage,
       sort: sortBy,
       lean: true,
       populate: ({path: 'album', populate:({path: 'artist', model: 'Artist'})})
@@ -45,7 +41,6 @@ async function getSongs(req, res){
       return res.status(404).send({message: 'No hay canciones disponibles'});
     }else{
       return res.status(200).send({
-        currentPage: songs.page,
         totalPages: songs.totalPages,
         docTotal: songs.totalDocs,
         songs: songs.docs

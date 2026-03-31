@@ -23,11 +23,11 @@
 
     @if(songs){
       <div class="gallery-songs">
-        <ul id="songs-list">
+        <ul id="song-list">
           @for(song of songs; track song.name){
             <li class="song-item">
               <div class="title">
-                <a class="btn btn-success">
+                <a class="btn btn-success" (click)="startPlayer(song)">
                   <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                 </a>
 
